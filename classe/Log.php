@@ -2,22 +2,20 @@
 class Log
 {
 
-  public static function formatDate($param) {
+  public static function formatDate() {
     //Create DateTime
-    $param = new DateTime();
+    $date = new DateTime();
     //Definition du fuseau horaire
-    $param -> setTimezone(new DateTimeZone('Europe/Paris'));
+    $date -> setTimezone(new DateTimeZone('Europe/Paris'));
 
-    return $param;
+    return $date;
   }
 
   public static function writeCSV($e) {
 
-    Log::formatDate($date);
+    var_dump(Log::formatDate());
 
-    var_dump();
-
-
+    var_dump($date);
     $log = array(
 
       //Formatage de la Date
@@ -26,7 +24,7 @@ class Log
       "Message" => $e -> getMessage()
     );
 
-    $log_file = fopen("./logs/logs_".$date -> format ('d-m-y').".csv", "a+");
+    $log_file = fopen("./logs/logs_".$date -> format('d-m-y').".csv", "a+");
     fputcsv($log_file, $log, ",");
     fclose($log_file);
   }
