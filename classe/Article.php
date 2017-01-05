@@ -36,26 +36,30 @@ class Article
 
 
   public function showArticle($bdd) {
-    //Recupera l'integralité de l'article
+
+    //Recupe l'integralité de l'article
     $sql = "SELECT * FROM article WHERE id = 10";
     $article = $bdd -> query($sql) -> fetch();
 
+    //Concatenation des differente parti de l'article
     $contentArticle = "<h1>" . $this -> titre . "</h1>";
     $contentArticle .= "<h2>" . $this -> chapo . "</h2>";
     $contentArticle .= "<p>" . $this -> contenu . "</p>";
     $contentArticle .= "<p>" . $this -> date . "</p>";
 
+    //Affichage de l'article
     echo $contentArticle;
-    //Definir les differente parti de l'article
-    //Afficher les differentes partie de l'article
+
   }
 
   public function updateArticle($bdd, $newTitre, $newChapo, $newContenu, $newJour) {
 
+    //Selection de l'article et preparation des contenues a changer
     $sql = $bdd->prepare("UPDATE article
     SET titre = :titre, chapo = :chapo, contenu = :contenu, jour = :jour
     WHERE id = :id");
 
+    //Execute
     $sql -> execute(array(
       "id" => 10,
       "titre" => $newTitre,
@@ -66,15 +70,23 @@ class Article
 
   }
 
-  public function deleteArticle() {
+  public function deleteArticle($bdd, $id) {
 
-    //Suppresion de l'article en BDD
+    //Selection de l'article a supprimer
+    $sql = "DELETE FROM article WHERE id = " . $id;
+
+    //Config d'un message en cas de reussite
+    if ($bdd->exec($sql)) {
+
+      echo 'Delete win !';
+
+    } else {
+
+      echo 'Fail !';
+
+    }
+
 
   }
 
-  public function writeComment() {
-
-    //Création du commentaire en BDD
-
-  }
 }
