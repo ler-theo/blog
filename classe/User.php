@@ -8,10 +8,11 @@ class User
   private $email;
   private $password;
   private $id;
-  private $group;
+  private $admin;
 
   //Contruction de __contruct
-  public function __construct($pseudo, $nom, $prenom, $email, $password, $group) {
+  public function __construct($id, $pseudo, $nom, $prenom, $email, $password, $group) {
+    $this -> id = $id;
     $this -> pseudo = $pseudo;
     $this -> nom = $nom;
     $this -> prenom = $prenom;
@@ -20,7 +21,7 @@ class User
     $this -> group = $group;
   }
 
-  public function inscription($bdd) {
+  public function signIn($bdd) {
 
     //Verification si l'utilisateur mail existe deja
     $sql = "SELECT * FROM user WHERE email ='".$this -> email."'";
@@ -28,8 +29,8 @@ class User
 
     //S'il n'existe pas ajout dans la bdd
     if (!$userEmail) {
-      $sql = $bdd->prepare("INSERT INTO user (pseudo, nom, prenom, email, password, group_id)
-      VALUES (:pseudo, :nom, :prenom, :email, :password, :group_id)");
+      $sql = $bdd->prepare("INSERT INTO user (pseudo, nom, prenom, email, password)
+      VALUES (:pseudo, :nom, :prenom, :email, :password)");
 
       $sql->execute(array(
       "pseudo" => $this -> pseudo,
@@ -37,7 +38,6 @@ class User
       "prenom" => $this -> prenom,
       "email" => $this -> email,
       "password" => $this -> password,
-      "group_id" => $this -> group,
       ));
 
     //S'il l'email existe deja, j'envoie un mesasge pour prevenir
@@ -52,9 +52,9 @@ class User
     //Verification des données de connect
     $sql = "SELECT * FROM user WHERE email = '".$this -> email."' AND password = '".$this -> password."'";
 
-
+    $logUser = $bdd->query($sql);
     //Si les données sont correct
-    if ($bdd->query($sql)) {
+    if ($logUser) {
 
       //Ajout de user a la session
       $_SESSION['user'] = array(
@@ -63,8 +63,8 @@ class User
         "userPrenom" => $this -> prenom,
         "userEmail" => $this -> email,
         "userPassword" => $this -> password,
-        "userGroup" => $this -> group
-        //"userId" => $this -> id
+        "userGroup" => $this -> group,
+        "userId" => $this -> id
       );
 
       //Si les données sont incorrect, envoie d'un message
