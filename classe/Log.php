@@ -2,20 +2,13 @@
 class Log
 {
 
-  public static function formatDate() {
+  public static function writeCSV($e) {
+
     //Create DateTime
     $date = new DateTime();
     //Definition du fuseau horaire
     $date -> setTimezone(new DateTimeZone('Europe/Paris'));
 
-    return $date;
-  }
-
-  public static function writeCSV($e) {
-
-    var_dump(Log::formatDate());
-
-    var_dump($date);
     $log = array(
 
       //Formatage de la Date

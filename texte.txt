@@ -1,0 +1,20 @@
+Class User :
+  - Nom
+  - Password
+  - pseudo
+  - Email
+  - Identifiants
+
+    - Inscription (Vérifiez s'il est deja inscrit)
+    - Connect
+    - Disconnet
+    - Poster des articles
+    - Poster des commentaires
+
+
+Class Article :
+  - Contenue
+  - Titre
+  - Auteur
+  - Commentaire
+  - Date

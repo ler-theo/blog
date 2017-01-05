@@ -1,8 +1,0 @@
-04.01.2017 [12:34:18]
-
-exception 'PDOException' with message 'SQLSTATE[HY000] [1045] Accès refusé pour l'utilisateur: 'root'@'@localhost' (mot de passe: OUI)' in C:\wamp64\www\blog\contents\init.php:10
-Stack trace:
-#0 C:\wamp64\www\blog\contents\init.php(10): PDO->__construct('mysql:host=loca...', 'root', '12', Array)
-#1 C:\wamp64\www\blog\index.php(3): include('C:\\wamp64\\www\\b...')
-#2 {main}
-
