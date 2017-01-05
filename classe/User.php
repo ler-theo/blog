@@ -11,32 +11,33 @@ class User
   private $group;
 
   //Contruction de __contruct
-  public function __construct($pseudo, $password, $email) {
-    $this -> pseudo = $speudo;
-    $this -> password = $password;
+  public function __construct($pseudo, $nom, $prenom, $email, $password, $group) {
+    $this -> pseudo = $pseudo;
+    $this -> nom = $nom;
+    $this -> prenom = $prenom;
     $this -> email = $email;
     $this -> password = $password;
-    $this -> id = $id;
+    $this -> group = $group;
   }
 
-  public function inscription() {
+  public function inscription($bdd) {
 
     //Verification si l'utilisateur mail existe deja
-    $sql = "SELECT * FROM user WHERE email =".$this -> email;
-    $userEmail = $bdd->querry($sql);
+    $sql = "SELECT * FROM user WHERE email ='".$this -> email."'";
+    $userEmail = $bdd -> query($sql) -> fetch();
 
-    //S'il n'existe pas ajotu dans la bdd
+    //S'il n'existe pas ajout dans la bdd
     if (!$userEmail) {
-      $sql = $bdd->prepare("INSERT INTO user (pseudo, nom, prenom, email, password)
-      VALUES (:pseudo, :nom, :prenom, :email, :password)");
-
+      $sql = $bdd->prepare("INSERT INTO user (pseudo, nom, prenom, email, password, group_id)
+      VALUES (:pseudo, :nom, :prenom, :email, :password, :group_id)");
 
       $sql->execute(array(
       "pseudo" => $this -> pseudo,
       "nom" => $this -> nom,
       "prenom" => $this -> prenom,
       "email" => $this -> email,
-      "password" => $this -> password
+      "password" => $this -> password,
+      "group_id" => $this -> group,
       ));
 
     //S'il l'email existe deja, j'envoie un mesasge pour prevenir
@@ -46,25 +47,25 @@ class User
 
   }
 
-  public function connect() {
+  public function connect($bdd) {
 
     //Verification des données de connect
-    $sql = "SELECT * FROM user WHERE email =".$this -> email."AND password =".$this -> password;
-    $checkConnect = $bdd->execute($sql);
+    $sql = "SELECT * FROM user WHERE email = '".$this -> email."' AND password = '".$this -> password."'";
+
 
     //Si les données sont correct
-    if ($checkConnect) {
+    if ($bdd->query($sql)) {
 
       //Ajout de user a la session
       $_SESSION['user'] = array(
-        "userPseudo" => $this -> pseudo = $checkConnect['pseudo'],
-        "userNom" => $this -> nom = $checkConnect['nom'],
-        "userPrenom" => $this -> prenom = $checkConnect['prenom'],
+        "userPseudo" => $this -> pseudo,
+        "userNom" => $this -> nom,
+        "userPrenom" => $this -> prenom,
         "userEmail" => $this -> email,
         "userPassword" => $this -> password,
-        "userGroup" => $this -> group = $checkConnect['group'],
-        "userId" => $this -> id = $checkConnect['id']
-      )
+        "userGroup" => $this -> group
+        //"userId" => $this -> id
+      );
 
       //Si les données sont incorrect, envoie d'un message
     } else {
@@ -74,7 +75,7 @@ class User
   }
 
   public function disconnect() {
-    session_destroy();
+    unset($_SESSION['user']);
   }
 
 }
