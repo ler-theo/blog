@@ -15,5 +15,5 @@ $user1 = new User(1, "Charlotte", "Jean", "Charle", "charle@org.fr", "toto", 1);
 $article1 = new Article("titre", "contenu", "jeudi", "chapo");
 
 
-$article1 -> writeArticle($bdd);
-//$article1 -> showArticle($bdd);
+//$article1 -> writeArticle($bdd);
+$article1 -> showArticle($bdd);

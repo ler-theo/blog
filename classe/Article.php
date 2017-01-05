@@ -40,10 +40,10 @@ class Article
     $sql = "SELECT * FROM article WHERE id = 10";
     $article = $bdd -> query($sql) -> fetch();
 
-    $contentArticle = "<h1>". $this -> titre . "</h1>";
-    $contentArticle .= "<h2>". $this -> chapo . "</h2>";
-    $contentArticle .= "<p>". $this -> contenu . "</p>";
-    $contentArticle .= "<p>". $this -> date . "</p>";
+    $contentArticle = "<h1>" . $this -> titre . "</h1>";
+    $contentArticle .= "<h2>" . $this -> chapo . "</h2>";
+    $contentArticle .= "<p>" . $this -> contenu . "</p>";
+    $contentArticle .= "<p>" . $this -> date . "</p>";
 
     echo $contentArticle;
     //Definir les differente parti de l'article
