@@ -50,12 +50,19 @@ class Article
     //Afficher les differentes partie de l'article
   }
 
-  public function updateArticle() {
+  public function updateArticle($bdd, $newTitre, $newChapo, $newContenu, $newJour) {
 
-    //Modification de l'article en BDD
-    //Selection de l'article a modifier
-    //prepare la requete
-    //Modifier les element visé
+    $sql = $bdd->prepare("UPDATE article
+    SET titre = :titre, chapo = :chapo, contenu = :contenu, jour = :jour
+    WHERE id = :id");
+
+    $sql -> execute(array(
+      "id" => 10,
+      "titre" => $newTitre,
+      "chapo" => $newChapo,
+      "contenu" => $newContenu,
+      "jour" => $newJour,
+    ));
 
   }
 
