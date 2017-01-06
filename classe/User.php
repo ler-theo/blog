@@ -40,9 +40,14 @@ class User
       "password" => $this -> password,
       ));
 
+      //Petit message 
+      echo  "utilisateur créer";
+
     //S'il l'email existe deja, j'envoie un mesasge pour prevenir
     } else {
-      $message = "L'email est deja existant";
+
+      echo "L'email est deja existant";
+
     }
 
   }
@@ -67,15 +72,22 @@ class User
         "userId" => $this -> id
       );
 
+      //Message en cas de reussite
+      echo "Vous etes maintenant connecter";
+
       //Si les données sont incorrect, envoie d'un message
     } else {
-        $message = "Echec de la connect, verifiez vos infos";
-      }
+
+      echo "Echec de la connect, verifiez vos infos";
+
+    }
 
   }
 
   public function disconnect() {
     unset($_SESSION['user']);
+
+    echo 'You win !';
   }
 
 }
