@@ -17,6 +17,7 @@ class Bdd
   //
   // }
 
+
   public function insertInto($table, $values, $array) {
 
     try {
@@ -48,11 +49,53 @@ class Bdd
 
     $sql = "SELECT " . $select . " FROM " . $tableSelect . $conditionSelect;
     $test = $bdd -> query($sql) -> fetch();
-    var_dump($sql);
+
     if ($test) {
       return true;
     } else {
       return false;
     }
   }
+
+  public function update($select, $setUpdate, $conditionUpdate, $array) {
+
+    try {
+      $bdd = new PDO("mysql:host=localhost;dbname=blog", "root", "",
+      array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8')
+      );
+    } catch (Exception $e) {
+      echo $e->getMessage();
+      Log::writeCSV($e);
+      die();
+    }
+
+
+    $sql = $bdd -> prepare("UPDATE " . $select . " SET " . $setUpdate . $conditionUpdate);
+    $sql -> execute($array);
+
+  }
+
+  public function delete($select, $conditionDelete) {
+
+    try {
+      $bdd = new PDO("mysql:host=localhost;dbname=blog", "root", "",
+      array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8')
+      );
+    } catch (Exception $e) {
+      echo $e->getMessage();
+      Log::writeCSV($e);
+      die();
+    }
+
+    $sql = $bdd -> prepare("DELETE FROM " . $select . $conditionDelete);
+    $test = $sql -> execute();
+
+    if ($test) {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
 }

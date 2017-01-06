@@ -19,27 +19,43 @@ class Article
   }
 
 
-  public function writeArticle($bdd) {
+  public function writeArticle() {
 
-    $sql = $bdd->prepare("INSERT INTO article (titre, contenu, jour, user_id, chapo)
-    VALUES (:titre, :contenu, :jour, :user_id, :chapo)");
+    //Instance de la classe Bdd
+    $sqlExec = new Bdd();
 
-    $sql -> execute(array(
-    "titre" => $this -> titre,
-    "contenu" => $this -> contenu,
-    "jour" => $this -> date,
-    "chapo" => $this -> chapo,
-    "user_id" => $_SESSION['user']['userId'],
-    ));
+    //Definition de la table a changer
+    $table = 'article (titre, contenu, jour, user_id, chapo)';
+
+    //Definition des valeurs a changer
+    $values = '(:titre, :contenu, :jour, :user_id, :chapo)';
+
+    //Definition du tableau de valeur modifier
+    $array = array(
+      "titre" => $this -> titre,
+      "contenu" => $this -> contenu,
+      "jour" => $this -> date,
+      "chapo" => $this -> chapo,
+      "user_id" => $_SESSION['user']['userId'],
+    );
+
+    $sqlExec -> insertInto($table, $values, $array);
 
   }
 
 
-  public function showArticle($bdd) {
+  public function showArticle() {
 
-    //Recupe l'integralité de l'article
-    $sql = "SELECT * FROM article WHERE id = 10";
-    $article = $bdd -> query($sql) -> fetch();
+
+    //Instance de la classe Bdd
+    $sqlExec = new Bdd();
+
+    $select = "*";
+    $tableSelect = "article";
+    $conditionSelect = " WHERE id = 10";
+
+    //S'il n'existe pas ajout dans la bdd
+    $sqlExec -> select($select, $tableSelect, $conditionSelect);
 
     //Concatenation des differente parti de l'article
     $contentArticle = "<h1>" . $this -> titre . "</h1>";
@@ -52,31 +68,38 @@ class Article
 
   }
 
-  public function updateArticle($bdd, $newTitre, $newChapo, $newContenu, $newJour) {
+  public function updateArticle($newTitre, $newChapo, $newContenu, $newJour) {
 
+    $sqlExec = new Bdd();
     //Selection de l'article et preparation des contenues a changer
-    $sql = $bdd->prepare("UPDATE article
-    SET titre = :titre, chapo = :chapo, contenu = :contenu, jour = :jour
-    WHERE id = :id");
+    $select = 'article';
+    $setUpdate = 'titre = :titre, chapo = :chapo, contenu = :contenu, jour = :jour ';
+    $conditionUpdate = 'WHERE id = :id';
 
     //Execute
-    $sql -> execute(array(
+    $array = array(
       "id" => 10,
       "titre" => $newTitre,
       "chapo" => $newChapo,
       "contenu" => $newContenu,
       "jour" => $newJour,
-    ));
+    );
 
+
+    $sqlExec -> update($select, $setUpdate, $conditionUpdate, $array);
   }
 
-  public function deleteArticle($bdd, $id) {
+  public function deleteArticle($id) {
 
-    //Selection de l'article a supprimer
-    $sql = "DELETE FROM article WHERE id = " . $id;
+    $sqlExec = new Bdd();
+
+    $select = "article";
+    $conditionDelete = " WHERE id = " . $id;
+
+    $sqlExec -> delete($select, $conditionDelete);
 
     //Config d'un message en cas de reussite
-    if ($bdd->exec($sql)) {
+    if (true) {
 
       echo 'Delete win !';
 
