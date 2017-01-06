@@ -21,45 +21,58 @@ class User
     $this -> group = $group;
   }
 
-  public function signIn($bdd) {
+  public function signIn() {
 
-    //Verification si l'utilisateur mail existe deja
-    $sql = "SELECT * FROM user WHERE email ='".$this -> email."'";
-    $userEmail = $bdd -> query($sql) -> fetch();
+    //Instance de la classe Bdd
+    $sqlExec = new Bdd();
+
+    $select = "*";
+    $tableSelect = "user";
+    $conditionSelect = " WHERE email = '" . $this -> email."'";
 
     //S'il n'existe pas ajout dans la bdd
-    if (!$userEmail) {
-      $sql = $bdd->prepare("INSERT INTO user (pseudo, nom, prenom, email, password)
-      VALUES (:pseudo, :nom, :prenom, :email, :password)");
-
-      $sql->execute(array(
-      "pseudo" => $this -> pseudo,
-      "nom" => $this -> nom,
-      "prenom" => $this -> prenom,
-      "email" => $this -> email,
-      "password" => $this -> password,
-      ));
-
-      //Petit message 
-      echo  "utilisateur créer";
+    if ($sqlExec -> select($select, $tableSelect, $conditionSelect)) {
 
     //S'il l'email existe deja, j'envoie un mesasge pour prevenir
+    echo "L'email est deja existant";
+
     } else {
 
-      echo "L'email est deja existant";
+      //Definition de la table a changer
+      $table = 'user (pseudo, nom, prenom, email, password)';
+
+      //Definition des valeurs a changer
+      $values = '(:pseudo, :nom, :prenom, :email, :password)';
+
+      //Definition du tableau de valeur modifier
+      $array = array(
+        "pseudo" => $this -> pseudo,
+        "nom" => $this -> nom,
+        "prenom" => $this -> prenom,
+        "email" => $this -> email,
+        "password" => $this -> password,
+      );
+
+      $sqlExec -> insertInto($table, $values, $array);
+      //Petit message
+      echo  "utilisateur créer";
+
 
     }
 
   }
 
-  public function connect($bdd) {
+  public function connect() {
 
-    //Verification des données de connect
-    $sql = "SELECT * FROM user WHERE email = '".$this -> email."' AND password = '".$this -> password."'";
+    //Instance de la classe Bdd
+    $sqlExec = new Bdd();
 
-    $logUser = $bdd->query($sql);
+    $select = "*";
+    $tableSelect = "user";
+    $conditionSelect = " WHERE email = '" . $this -> email."' AND password = '" . $this -> password . "'";
+
     //Si les données sont correct
-    if ($logUser) {
+    if ($sqlExec -> select($select, $tableSelect, $conditionSelect)) {
 
       //Ajout de user a la session
       $_SESSION['user'] = array(
@@ -85,6 +98,7 @@ class User
   }
 
   public function disconnect() {
+
     unset($_SESSION['user']);
 
     echo 'You win !';
